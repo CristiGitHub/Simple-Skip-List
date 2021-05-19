@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/SD/SkipListProject/Node.h
+cstdlib
+-
+
+D:/SD/SkipListProject/SkipList.h
+memory.h
+-
+Node.h
+D:/SD/SkipListProject/Node.h
+iostream
+-
+
+D:/SD/SkipListProject/main.cpp
+iostream
+-
+ctime
+-
+SkipList.h
+D:/SD/SkipListProject/SkipList.h
+

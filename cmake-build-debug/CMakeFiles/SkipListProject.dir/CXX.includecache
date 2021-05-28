@@ -23,6 +23,8 @@ iostream
 -
 ctime
 -
+cmath
+-
 SkipList.h
 D:/SD/SkipListProject/SkipList.h
 

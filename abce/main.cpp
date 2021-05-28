@@ -1,15 +1,31 @@
-//
-// Created by Cristi on 5/19/2021.
-// Sursa de inspiratie pentru structura si mecanicile unui Skip List: https://www.geeksforgeeks.org/skip-list-set-2-insertion/
-
-#ifndef SKIPLISTPROJECT_SKIPLIST_H
-#define SKIPLISTPROJECT_SKIPLIST_H
-
-
+#include <fstream>
 #include <memory.h>
-#include "Node.h"
-#include <iostream>
+#include <cmath>
+
+#define fn "abce."
 using namespace std;
+ifstream f(fn"in");
+ofstream g(fn"out");
+class Node {
+private:
+    int val;
+public:
+    Node **next;
+    Node(int valoare, int nivel){
+        val=valoare;
+        next = new Node*[nivel+1];
+        memset(next,0,sizeof(Node*)*(nivel+1));
+    }
+
+    int getVal() const {
+        return val;
+    }
+
+    void setVal(int val) {
+        Node::val = val;
+    }
+
+};
 
 class SkipList {
 private:
@@ -27,12 +43,12 @@ public:
     int Randomizer(){
         float ran = (float)rand()/RAND_MAX;
         int lvl = 0 ;
-         while(ran < fract && lvl < MaxLevel)
-         {
-             lvl++;
-             ran=(float)rand()/RAND_MAX;
-         }
-         return lvl;
+        while(ran < fract && lvl < MaxLevel)
+        {
+            lvl++;
+            ran=(float)rand()/RAND_MAX;
+        }
+        return lvl;
     }
     Node* createNode(int val , int nivel)
     {
@@ -62,10 +78,10 @@ public:
             Node *n =createNode(val,auxNivel);
             for(int i = 0 ; i <= auxNivel ; ++i)
             {
-                    if(update[i]!= NULL ) {
-                        n->next[i] = update[i]->next[i];
-                        update[i]->next[i] = n;
-                    }
+                if(update[i]!= NULL ) {
+                    n->next[i] = update[i]->next[i];
+                    update[i]->next[i] = n;
+                }
             }
         }
     }
@@ -106,7 +122,7 @@ public:
             }
         }
         x=x->next[0];
-        cout<<"Succesorul lui "<<val<<" este  "<<x->getVal()<<'\n';
+            g<<x->getVal()<<'\n';
 
 
     }
@@ -118,11 +134,11 @@ public:
                 x=x->next[i];
             }
         }
-        cout<<"Predecesorul lui "<<val<<" este  "<<x->getVal()<<'\n';
+            g<<x->getVal()<<'\n';
 
     }
 
-   friend ostream &operator<<(ostream& os , const SkipList * lista){
+    friend ostream &operator<<(ostream& os , const SkipList * lista){
         for(int i = 0 ; i <= lista->nivel ; ++i)
         {
             Node *nod = lista->begin;
@@ -130,12 +146,13 @@ public:
                 os<<"Nivelul "<<i<<": ";
             while(nod != NULL){
                 if(nod->getVal()!=-1)
-                os<<nod->getVal()<<" ";
+                    os<<nod->getVal()<<" ";
                 nod=nod->next[i];
             }
-            cout<<endl;
+            g<<endl;
         }
     }
+
     void contine(int val) {
         Node *x = begin;
         for (int i = nivel; i >= 0; --i) {
@@ -145,15 +162,14 @@ public:
         }
         x = x->next[0];
         if(x!=NULL && x->getVal() == val)
-            cout<<"Elementul exista in  Skip List";
+            g<<1;
         else
-            cout<<"Elementul nu exista in Skip List";
-        cout<<'\n';
+            g<<0;
+        g<<'\n';
     }
 
     void interval(int val1,int val2) {
         Node *x = begin;
-        cout<<"Elementele din intevalul ["<<val1<<","<<val2<<"] sunt :";
         for (int i = nivel; i >= 0; --i) {
             while (x->next[i] != NULL && x->next[i]->getVal() < val1) {
                 x = x->next[i];
@@ -161,12 +177,40 @@ public:
         }
         while (x->next[0] != NULL && x->next[0]->getVal() >= val1 && x->next[0]->getVal() <= val2) {
             x = x->next[0];
-            cout << x->getVal() << " ";
+            g << x->getVal() << " ";
         }
-        cout << '\n';
+        g << '\n';
     }
-
 };
 
 
-#endif //SKIPLISTPROJECT_SKIPLIST_H
+int n,x,y,z;
+int main() {
+    f>>n;
+    SkipList lst(round(sqrt(n)),0.5);
+    for(int i = 0 ; i < n ; ++i)
+    {
+        f>>x>>y;
+        if(x==1)
+            lst.insert(y);
+        else
+            if(x==2)
+                lst.sterge(y);
+            else
+                if(x==3)
+                    lst.contine(y);
+                    else
+                        if(x==4)
+                            lst.predecesor(y);
+                        else
+                            if(x==5)
+                                lst.succesor(y);
+                            if(x==6)
+                            {
+                                f>>z;
+                                lst.interval(y,z);
+                            }
+    }
+
+    return 0;
+}
